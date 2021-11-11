@@ -29,11 +29,23 @@
         private void InitializeComponent()
         {
             this.btnOnOff = new System.Windows.Forms.Button();
-            this.llblFileSystemWatcher = new System.Windows.Forms.Label();
+            this.lblFileSystemWatcher = new System.Windows.Forms.Label();
             this.lblOnOff = new System.Windows.Forms.Label();
             this.lblDestinationFolder = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txbxDestinationFolder = new System.Windows.Forms.TextBox();
             this.btnChangeFolder = new System.Windows.Forms.Button();
+            this.lblEncryptFiles = new System.Windows.Forms.Label();
+            this.txbxEncryptFolder = new System.Windows.Forms.TextBox();
+            this.btnChooseFolder = new System.Windows.Forms.Button();
+            this.btnEncrypt = new System.Windows.Forms.Button();
+            this.lblDecryptFile = new System.Windows.Forms.Label();
+            this.btnChooseFile = new System.Windows.Forms.Button();
+            this.btnDecrypt = new System.Windows.Forms.Button();
+            this.lblNote = new System.Windows.Forms.Label();
+            this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOnOff
@@ -47,15 +59,15 @@
             this.btnOnOff.UseVisualStyleBackColor = true;
             this.btnOnOff.Click += new System.EventHandler(this.btnOnOff_Click);
             // 
-            // llblFileSystemWatcher
+            // lblFileSystemWatcher
             // 
-            this.llblFileSystemWatcher.AutoSize = true;
-            this.llblFileSystemWatcher.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.llblFileSystemWatcher.Location = new System.Drawing.Point(12, 22);
-            this.llblFileSystemWatcher.Name = "llblFileSystemWatcher";
-            this.llblFileSystemWatcher.Size = new System.Drawing.Size(247, 17);
-            this.llblFileSystemWatcher.TabIndex = 1;
-            this.llblFileSystemWatcher.Text = "FILE SYSTEM WATCHER IS TURNED";
+            this.lblFileSystemWatcher.AutoSize = true;
+            this.lblFileSystemWatcher.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFileSystemWatcher.Location = new System.Drawing.Point(12, 22);
+            this.lblFileSystemWatcher.Name = "lblFileSystemWatcher";
+            this.lblFileSystemWatcher.Size = new System.Drawing.Size(247, 17);
+            this.lblFileSystemWatcher.TabIndex = 1;
+            this.lblFileSystemWatcher.Text = "FILE SYSTEM WATCHER IS TURNED";
             // 
             // lblOnOff
             // 
@@ -77,14 +89,14 @@
             this.lblDestinationFolder.TabIndex = 3;
             this.lblDestinationFolder.Text = "DESTINATION FOLDER:";
             // 
-            // textBox1
+            // txbxDestinationFolder
             // 
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(15, 117);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(235, 21);
-            this.textBox1.TabIndex = 4;
+            this.txbxDestinationFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbxDestinationFolder.Location = new System.Drawing.Point(15, 117);
+            this.txbxDestinationFolder.Name = "txbxDestinationFolder";
+            this.txbxDestinationFolder.ReadOnly = true;
+            this.txbxDestinationFolder.Size = new System.Drawing.Size(235, 21);
+            this.txbxDestinationFolder.TabIndex = 4;
             // 
             // btnChangeFolder
             // 
@@ -95,20 +107,118 @@
             this.btnChangeFolder.TabIndex = 5;
             this.btnChangeFolder.Text = "CHANGE DESTINATION FOLDER";
             this.btnChangeFolder.UseVisualStyleBackColor = true;
+            this.btnChangeFolder.Click += new System.EventHandler(this.btnChangeFolder_Click);
+            // 
+            // lblEncryptFiles
+            // 
+            this.lblEncryptFiles.AutoSize = true;
+            this.lblEncryptFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEncryptFiles.Location = new System.Drawing.Point(12, 196);
+            this.lblEncryptFiles.Name = "lblEncryptFiles";
+            this.lblEncryptFiles.Size = new System.Drawing.Size(118, 17);
+            this.lblEncryptFiles.TabIndex = 6;
+            this.lblEncryptFiles.Text = "ENCRYPT FILES:";
+            // 
+            // txbxEncryptFolder
+            // 
+            this.txbxEncryptFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbxEncryptFolder.Location = new System.Drawing.Point(15, 216);
+            this.txbxEncryptFolder.Name = "txbxEncryptFolder";
+            this.txbxEncryptFolder.ReadOnly = true;
+            this.txbxEncryptFolder.Size = new System.Drawing.Size(235, 21);
+            this.txbxEncryptFolder.TabIndex = 7;
+            // 
+            // btnChooseFolder
+            // 
+            this.btnChooseFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChooseFolder.Location = new System.Drawing.Point(15, 243);
+            this.btnChooseFolder.Name = "btnChooseFolder";
+            this.btnChooseFolder.Size = new System.Drawing.Size(235, 28);
+            this.btnChooseFolder.TabIndex = 8;
+            this.btnChooseFolder.Text = "CHOOSE FOLDER";
+            this.btnChooseFolder.UseVisualStyleBackColor = true;
+            this.btnChooseFolder.Click += new System.EventHandler(this.btnChooseFolder_Click);
+            // 
+            // btnEncrypt
+            // 
+            this.btnEncrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEncrypt.Location = new System.Drawing.Point(256, 243);
+            this.btnEncrypt.Name = "btnEncrypt";
+            this.btnEncrypt.Size = new System.Drawing.Size(82, 28);
+            this.btnEncrypt.TabIndex = 9;
+            this.btnEncrypt.Text = "ENCRYPT";
+            this.btnEncrypt.UseVisualStyleBackColor = true;
+            this.btnEncrypt.Click += new System.EventHandler(this.btnEncrypt_Click);
+            // 
+            // lblDecryptFile
+            // 
+            this.lblDecryptFile.AutoSize = true;
+            this.lblDecryptFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDecryptFile.Location = new System.Drawing.Point(12, 296);
+            this.lblDecryptFile.Name = "lblDecryptFile";
+            this.lblDecryptFile.Size = new System.Drawing.Size(109, 17);
+            this.lblDecryptFile.TabIndex = 10;
+            this.lblDecryptFile.Text = "DECRYPT FILE:";
+            // 
+            // btnChooseFile
+            // 
+            this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnChooseFile.Location = new System.Drawing.Point(15, 316);
+            this.btnChooseFile.Name = "btnChooseFile";
+            this.btnChooseFile.Size = new System.Drawing.Size(235, 28);
+            this.btnChooseFile.TabIndex = 12;
+            this.btnChooseFile.Text = "CHOOSE FILE";
+            this.btnChooseFile.UseVisualStyleBackColor = true;
+            this.btnChooseFile.Click += new System.EventHandler(this.btnChooseFile_Click);
+            // 
+            // btnDecrypt
+            // 
+            this.btnDecrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnDecrypt.Location = new System.Drawing.Point(256, 316);
+            this.btnDecrypt.Name = "btnDecrypt";
+            this.btnDecrypt.Size = new System.Drawing.Size(82, 28);
+            this.btnDecrypt.TabIndex = 13;
+            this.btnDecrypt.Text = "DECRYPT";
+            this.btnDecrypt.UseVisualStyleBackColor = true;
+            this.btnDecrypt.Click += new System.EventHandler(this.btnDecrypt_Click);
+            // 
+            // lblNote
+            // 
+            this.lblNote.AutoSize = true;
+            this.lblNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblNote.Location = new System.Drawing.Point(12, 347);
+            this.lblNote.Name = "lblNote";
+            this.lblNote.Size = new System.Drawing.Size(282, 13);
+            this.lblNote.TabIndex = 14;
+            this.lblNote.Text = "Note: Decrypt option will ask to choose destination .txt file!";
+            // 
+            // fileSystemWatcher
+            // 
+            this.fileSystemWatcher.EnableRaisingEvents = true;
+            this.fileSystemWatcher.SynchronizingObject = this;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(464, 441);
+            this.Controls.Add(this.lblNote);
+            this.Controls.Add(this.btnDecrypt);
+            this.Controls.Add(this.btnChooseFile);
+            this.Controls.Add(this.lblDecryptFile);
+            this.Controls.Add(this.btnEncrypt);
+            this.Controls.Add(this.btnChooseFolder);
+            this.Controls.Add(this.txbxEncryptFolder);
+            this.Controls.Add(this.lblEncryptFiles);
             this.Controls.Add(this.btnChangeFolder);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txbxDestinationFolder);
             this.Controls.Add(this.lblDestinationFolder);
             this.Controls.Add(this.lblOnOff);
-            this.Controls.Add(this.llblFileSystemWatcher);
+            this.Controls.Add(this.lblFileSystemWatcher);
             this.Controls.Add(this.btnOnOff);
             this.Name = "MainForm";
             this.Text = "ZI Zad 1";
+            ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,11 +227,22 @@
         #endregion
 
         private System.Windows.Forms.Button btnOnOff;
-        private System.Windows.Forms.Label llblFileSystemWatcher;
+        private System.Windows.Forms.Label lblFileSystemWatcher;
         private System.Windows.Forms.Label lblOnOff;
         private System.Windows.Forms.Label lblDestinationFolder;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txbxDestinationFolder;
         private System.Windows.Forms.Button btnChangeFolder;
+        private System.Windows.Forms.Label lblEncryptFiles;
+        private System.Windows.Forms.TextBox txbxEncryptFolder;
+        private System.Windows.Forms.Button btnChooseFolder;
+        private System.Windows.Forms.Button btnEncrypt;
+        private System.Windows.Forms.Label lblDecryptFile;
+        private System.Windows.Forms.Button btnChooseFile;
+        private System.Windows.Forms.Button btnDecrypt;
+        private System.Windows.Forms.Label lblNote;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.IO.FileSystemWatcher fileSystemWatcher;
     }
 }
 
