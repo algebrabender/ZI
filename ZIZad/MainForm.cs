@@ -153,7 +153,10 @@ namespace ZIZad
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
             List<string> encryptedFileLines = new List<string>();
-            foreach (var file in this.encryptDirectoryInfo.GetFiles()) //TODO: ADD TXT FILTER
+            List<FileInfo> fileInfos = this.encryptDirectoryInfo.GetFiles().ToList();
+            List<FileInfo> onlyTxts = fileInfos.Where(fi => fi.Extension == ".txt").ToList();
+            
+            foreach (var file in onlyTxts)
             {
                 encryptedFileLines.Clear();
                 encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(file.FullName));
@@ -177,12 +180,14 @@ namespace ZIZad
 
             string[] splited = this.decryptFilePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace("Encrypted.txt", "Decrypted.txt");
+
             this.WriteIntoDestinationFolder(decrytedFileLines, folderBrowserDialog.SelectedPath + "\\" + fileName);
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)
         {
             string newFilePath = e.FullPath;
+
             List<string> encryptedFileLines = new List<string>();
 
             encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(newFilePath));
