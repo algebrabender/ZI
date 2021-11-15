@@ -11,22 +11,89 @@ namespace ZIZad
     {
         #region Attributes
 
-        //TODO: USE DIFFERENT KEYSQUARE
-        private char[,] keySquare = new char[,] { {'p', 'h', 'q', 'g', 'm'},
-                                                  {'e', 'a', 'y', 'l', 'n'},
-                                                  {'o', 'f', 'd', 'x', 'k'},
-                                                  {'r', 'c', 'v', 's', 'z'},
-                                                  {'w', 'b', 'u', 't', 'i'}};
+        private char[,] keySquare = new char[5, 5];
         private int period = 5;
+        private int iIndexI; //da bi se smanjilo pretrazivanje
+        private int iIndexJ;
 
         #endregion
 
         public Bifid()
-        {
-            this.Encrypt(null);
-        }
+        { }
 
         #region Methodes
+
+        private void LoadKeySquareAndPeriod(string fileName)
+        {
+            if (fileName.Contains("Encrypted"))
+                fileName = fileName.Replace("Encrypted", "");
+            else if (fileName.Contains("Decrypted"))
+                fileName = fileName.Replace("Decrypted", "");
+
+            if (!File.Exists("..\\..\\Key Squares\\" + fileName))
+            {
+                this.GenerateAndSaveKeySquareAndPeriod(fileName);
+                return;
+            }
+
+            using (StreamReader sr = new StreamReader("..\\..\\Key Squares\\" + fileName))
+            {
+                string readLine = sr.ReadLine();
+                int i = 0;
+                int j = 0;
+
+                while(i < 5)
+                {
+                    foreach (var item in readLine)
+                    {
+                        if (item == 'i')
+                        {
+                            iIndexI = i;
+                            iIndexJ = j;
+                        }
+                        keySquare[i, j++] = item;
+                    }
+                    i++;
+                    j = 0;
+                    readLine = sr.ReadLine();
+                }
+
+                sr.Close();
+            }
+
+        }
+
+        public void GenerateAndSaveKeySquareAndPeriod(string fileName)
+        {
+            using (StreamWriter sw = new StreamWriter("..\\..\\Key Squares\\" + fileName, false))
+            {
+                Random rand = new Random();
+                List<char> showedLetters = new List<char>();
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        int charNumb = rand.Next(97, 123);
+                        char letter = Convert.ToChar(charNumb);
+                        if (letter == 'j' || showedLetters.Contains(letter))
+                        {
+                            j--;
+                            continue;
+                        }
+                        if (letter == 'i')
+                        {
+                            iIndexI = i;
+                            iIndexJ = j;
+                        }
+                        showedLetters.Add(letter);
+                        keySquare[i, j] = letter;
+                        sw.Write(letter);
+                    }
+                    sw.WriteLine();
+                }
+                sw.Close();
+            }
+        }
 
         private void stepOneEncrypt(string plaintext, out string[] values)
         {
@@ -44,7 +111,12 @@ namespace ZIZad
                 {
                     for (int j = 0; j < 5; j++)
                     {
-                        if (keySquare[i, j] == item)
+                        if (item == 'j')
+                        {
+                            values[0] += iIndexI.ToString();
+                            values[1] += iIndexJ.ToString();
+                        }
+                        else if (keySquare[i, j] == item)
                         {
                             values[0] += (i + 1).ToString();
                             values[1] += (j + 1).ToString();
@@ -52,8 +124,6 @@ namespace ZIZad
                     }
                 }
             }
-            Console.WriteLine(values[0]);
-            Console.WriteLine(values[1]);
         }
 
         private void stepTwoEncrypt(string[] values)
@@ -78,9 +148,6 @@ namespace ZIZad
             }
             values[0] += trimmedValues[0].Substring(temp - length);
             values[1] += trimmedValues[1].Substring(temp - length);
-
-            Console.WriteLine(values[0]);
-            Console.WriteLine(values[1]);
         }
 
         private void stepThreeEncrypt(string[] values, out string newValue)
@@ -91,8 +158,6 @@ namespace ZIZad
 
             for (int i = 0; i < rows.Length; i++)
                 newValue += rows[i] + cols[i] + " ";
-
-            Console.WriteLine(newValue);
         }
 
         private void stepFourEncrypt(string newValue, out string encryptedPlaintext)
@@ -108,8 +173,6 @@ namespace ZIZad
                 }
                 encryptedPlaintext += keySquare[Int32.Parse(newValue[i].ToString()) - 1, Int32.Parse(newValue[i+1].ToString()) - 1];
             }
-
-            Console.WriteLine(encryptedPlaintext);
         }
 
         private void stepOneDecrypt(string encryptedPlaintext, out string newValue)
@@ -126,8 +189,6 @@ namespace ZIZad
                 length -= period;
             }
             newValue += encryptedPlaintext.Substring(temp - length);
-
-            Console.WriteLine(newValue);
         }
 
         private void stepTwoDecrypt(string newValue, out string value)
@@ -159,8 +220,6 @@ namespace ZIZad
                     }
                 }
             }
-
-            Console.WriteLine(value);
         }
 
         private void stepThreeDecrypt(string value, out string[] values)
@@ -179,9 +238,6 @@ namespace ZIZad
             }
             values[0] += value.Substring(temp - length, length / 2);
             values[1] += value.Substring(temp - length / 2, length / 2);
-
-            Console.WriteLine(values[0]);
-            Console.WriteLine(values[1]);
         }
 
         private void stepFourDecrypt(string[] values, out string plaintext)
@@ -195,46 +251,81 @@ namespace ZIZad
 
                 plaintext += keySquare[row, col];
             }
-
-            Console.WriteLine(plaintext);
         }
 
-        public void Encrypt(FileInfo file)
+        public List<string> Encrypt(string filePath)
         {
-            //TODO: CHECK FOR STRING LENGTH
+            string[] splited = filePath.Split('\\');
+            string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
+            this.LoadKeySquareAndPeriod(fileName);
 
-            string temp = "defend the east wall of the castle";
-            string[] values;
+            List<string> plaintextLines = new List<string>();
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                string line = sr.ReadLine();
+                while (!String.IsNullOrEmpty(line))
+                {
+                    plaintextLines.Add(line);
+                    line = sr.ReadLine();
+                }
+
+                sr.Close();
+            }
+
+            string[] rcValues;
+            string rcTogether;
+            List<string> encryptedLines = new List<string>();
+
+            foreach (var item in plaintextLines)
+            {
+                string temp;
+                this.stepOneEncrypt(item, out rcValues);
+                this.stepTwoEncrypt(rcValues);
+                this.stepThreeEncrypt(rcValues, out rcTogether);
+                this.stepFourEncrypt(rcTogether, out temp);
+                encryptedLines.Add(temp);
+            }
+
+            return encryptedLines;
+        }
+
+        public List<string> Decrypt(string filePath)
+        {
+            string[] splited = filePath.Split('\\');
+            string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
+            this.LoadKeySquareAndPeriod(fileName);
+
+            List<string> plaintextLines = new List<string>();
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                string line = sr.ReadLine();
+                while (!String.IsNullOrEmpty(line))
+                {
+                    plaintextLines.Add(line);
+                    line = sr.ReadLine();
+                }
+
+                sr.Close();
+            }
+
             string temp2;
             string temp3;
-
-            this.stepOneEncrypt(temp, out values);
-            this.stepTwoEncrypt(values);
-            this.stepThreeEncrypt(values, out temp2);
-            this.stepFourEncrypt(temp2, out temp3);
-
-            Console.WriteLine("-----------------------------------------------");
-
-            this.Decrypt(temp3);
-        }
-
-        public void Decrypt(FileInfo file)
-        {
-
-            //TODO
-        }
-
-        public void Decrypt(string temp)
-        {
             string[] values;
-            string temp2;
-            string temp3;
             string plaintext;
+            List<string> decryptedLines = new List<string>();
 
-            this.stepOneDecrypt(temp, out temp2);
-            this.stepTwoDecrypt(temp2, out temp3);
-            this.stepThreeDecrypt(temp3, out values);
-            this.stepFourDecrypt(values, out plaintext);
+            foreach (var item in plaintextLines)
+            {
+                this.stepOneDecrypt(item, out temp2);
+                this.stepTwoDecrypt(temp2, out temp3);
+                this.stepThreeDecrypt(temp3, out values);
+                this.stepFourDecrypt(values, out plaintext);
+                decryptedLines.Add(plaintext);
+            }
+
+            return decryptedLines;
         }
 
         #endregion

@@ -141,6 +141,7 @@
             // 
             // btnEncrypt
             // 
+            this.btnEncrypt.Enabled = false;
             this.btnEncrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnEncrypt.Location = new System.Drawing.Point(256, 243);
             this.btnEncrypt.Name = "btnEncrypt";
@@ -173,6 +174,7 @@
             // 
             // btnDecrypt
             // 
+            this.btnDecrypt.Enabled = false;
             this.btnDecrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDecrypt.Location = new System.Drawing.Point(256, 316);
             this.btnDecrypt.Name = "btnDecrypt";
@@ -196,6 +198,7 @@
             // 
             this.fileSystemWatcher.EnableRaisingEvents = true;
             this.fileSystemWatcher.SynchronizingObject = this;
+            this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.OnCreated);
             // 
             // MainForm
             // 

@@ -22,7 +22,6 @@ namespace ZIZad
         private string encryptFolderPath;
         private DirectoryInfo encryptDirectoryInfo;
         private string decryptFilePath;
-        private FileInfo decryptFileInfo;
 
         private Bifid cryptoAlgorithm;
 
@@ -32,12 +31,29 @@ namespace ZIZad
         {
             fswOnOff = false;
 
-            this.targetFolderPath = "C:\\Users\\jelen\\Desktop\\ZI target folder";
+            this.targetFolderPath = "D:\\School and Uni\\ELFAK\\ZI target folder";
 
             cryptoAlgorithm = new Bifid();
 
             InitializeComponent();
         }
+
+        #region Methodes
+
+        private void WriteIntoDestinationFolder(List<string> fileLines, string fileName)
+        {
+            using (StreamWriter sw = new StreamWriter(fileName))
+            {
+                foreach (var item in fileLines)
+                {
+                    sw.WriteLine(item);
+                }
+
+                sw.Close();
+            }
+        }
+
+        #endregion
 
         #region EventHandlers
 
@@ -130,20 +146,25 @@ namespace ZIZad
                 return;
 
             this.decryptFilePath = openFileDialog.FileName;
-            this.decryptFileInfo = new FileInfo(this.decryptFilePath);
 
             btnDecrypt.Enabled = true;
         }
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
+            List<string> encryptedFileLines = new List<string>();
             foreach (var file in this.encryptDirectoryInfo.GetFiles()) //TODO: ADD TXT FILTER
-                this.cryptoAlgorithm.Encrypt(file);
+            {
+                encryptedFileLines.Clear();
+                encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(file.FullName));
+                
+                this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", "Encrypted.txt"));
+            }
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            this.cryptoAlgorithm.Decrypt(this.decryptFileInfo);
+            List<string> decrytedFileLines = this.cryptoAlgorithm.Decrypt(this.decryptFilePath);
 
             folderBrowserDialog.SelectedPath = "";
             folderBrowserDialog.ShowDialog();
@@ -153,14 +174,23 @@ namespace ZIZad
                 MessageBox.Show("Destination Folder must be chosen!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 folderBrowserDialog.ShowDialog();
             }
+
+            string[] splited = this.decryptFilePath.Split('\\');
+            string fileName = splited[splited.Length - 1].Replace("Encrypted.txt", "Decrypted.txt");
+            this.WriteIntoDestinationFolder(decrytedFileLines, folderBrowserDialog.SelectedPath + "\\" + fileName);
         }
 
-        private static void OnCreated(object sender, FileSystemEventArgs e)
+        private void OnCreated(object sender, FileSystemEventArgs e)
         {
             string newFilePath = e.FullPath;
-            FileInfo newFileFileInfo = new FileInfo(newFilePath);
+            List<string> encryptedFileLines = new List<string>();
 
-            //TODO: ENCRYPTING PART
+            encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(newFilePath));
+
+            string[] splited = newFilePath.Split('\\');
+            string fileName = splited[splited.Length - 1].Replace(".txt", "Encrypted.txt");
+
+            this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + fileName);
         }
 
         #endregion
