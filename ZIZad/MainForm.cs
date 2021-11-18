@@ -22,6 +22,8 @@ namespace ZIZad
         private string encryptFolderPath;
         private DirectoryInfo encryptDirectoryInfo;
         private string decryptFilePath;
+        private string redDotPath = "..\\..\\RedDot.ico";
+        private string greenDotPath = "..\\..\\GreenDot.ico";
 
         private Bifid cryptoAlgorithm;
 
@@ -31,11 +33,11 @@ namespace ZIZad
         {
             fswOnOff = false;
 
-            this.targetFolderPath = "D:\\School and Uni\\ELFAK\\ZI target folder";
-
             cryptoAlgorithm = new Bifid();
 
             InitializeComponent();
+
+            pbxDot.Image = Image.FromFile(redDotPath);
         }
 
         #region Methodes
@@ -61,6 +63,12 @@ namespace ZIZad
         {
             if (!fswOnOff)
             {
+                if (String.IsNullOrEmpty(txbxTargetFolder.Text))
+                {
+                    MessageBox.Show("Target Folder must be chosen first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (String.IsNullOrEmpty(txbxDestinationFolder.Text))
                 {
                     MessageBox.Show("Destination Folder must be chosen first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -70,11 +78,13 @@ namespace ZIZad
                 lblOnOff.Text = "ON";
                 fswOnOff = true;
 
+                btnTargetFolder.Enabled = false;
                 btnChangeFolder.Enabled = false;
                 btnChooseFolder.Enabled = false;
                 btnEncrypt.Enabled = false;
                 btnChooseFile.Enabled = false;
                 btnDecrypt.Enabled = false;
+                pbxDot.Image = Image.FromFile(greenDotPath);
 
                 fileSystemWatcher = new FileSystemWatcher();
                 fileSystemWatcher.Path = this.targetFolderPath;
@@ -87,12 +97,32 @@ namespace ZIZad
                 lblOnOff.Text = "OFF";
                 fswOnOff = false;
 
+                btnTargetFolder.Enabled = true;
                 btnChangeFolder.Enabled = true;
                 btnChooseFolder.Enabled = true;
                 btnChooseFile.Enabled = true;
+                pbxDot.Image = Image.FromFile(redDotPath);
 
                 fileSystemWatcher.EnableRaisingEvents = false;
             }
+        }
+
+        private void btnTargetFolder_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog.SelectedPath = "";
+            folderBrowserDialog.ShowDialog();
+
+            if (String.IsNullOrEmpty(folderBrowserDialog.SelectedPath))
+                return;
+
+            if (folderBrowserDialog.SelectedPath == this.destinationFolderPath)
+            {
+                MessageBox.Show("Target Folder must be different from Destination Folder!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            this.targetFolderPath = folderBrowserDialog.SelectedPath;
+            txbxTargetFolder.Text = this.targetFolderPath;
         }
 
         private void btnChangeFolder_Click(object sender, EventArgs e)
@@ -182,6 +212,8 @@ namespace ZIZad
             string fileName = splited[splited.Length - 1].Replace("Encrypted.txt", "Decrypted.txt");
 
             this.WriteIntoDestinationFolder(decrytedFileLines, folderBrowserDialog.SelectedPath + "\\" + fileName);
+
+            btnDecrypt.Enabled = false;
         }
 
         private void OnCreated(object sender, FileSystemEventArgs e)

@@ -27,7 +27,7 @@ namespace ZIZad
         {
             if (fileName.Contains("Encrypted"))
                 fileName = fileName.Replace("Encrypted", "");
-            else if (fileName.Contains("Decrypted"))
+            if (fileName.Contains("Decrypted"))
                 fileName = fileName.Replace("Decrypted", "");
 
             if (!File.Exists("..\\..\\Key Squares\\" + fileName))
@@ -75,20 +75,23 @@ namespace ZIZad
                     {
                         int charNumb = rand.Next(97, 123);
                         char letter = Convert.ToChar(charNumb);
-                        if (letter == 'j' || showedLetters.Contains(letter))
-                        {
-                            j--;
-                            continue;
-                        }
                         if (letter == 'i')
                         {
                             iIndexI = i;
                             iIndexJ = j;
                         }
+                        if (letter == 'j' || showedLetters.Contains(letter))
+                        {
+                            j--;
+                            continue;
+                        }
+
                         showedLetters.Add(letter);
                         keySquare[i, j] = letter;
+
                         sw.Write(letter);
                     }
+
                     sw.WriteLine();
                 }
                 sw.Close();
@@ -98,6 +101,7 @@ namespace ZIZad
         private void stepOneEncrypt(string plaintext, out string[] values)
         {
             values = new string[2]; //values[0] - row, values[1] - col
+            bool foundJ = false;
 
             foreach (var item in plaintext)
             {
@@ -113,14 +117,23 @@ namespace ZIZad
                     {
                         if (item == 'j')
                         {
-                            values[0] += iIndexI.ToString();
-                            values[1] += iIndexJ.ToString();
+                            values[0] += (iIndexI + 1).ToString();
+                            values[1] += (iIndexJ + 1).ToString();
+
+                            foundJ = true;
+                            break;
                         }
                         else if (keySquare[i, j] == item)
                         {
                             values[0] += (i + 1).ToString();
                             values[1] += (j + 1).ToString();
                         }
+                    }
+                    
+                    if (foundJ)
+                    {
+                        foundJ = false;
+                        break;
                     }
                 }
             }

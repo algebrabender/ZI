@@ -45,7 +45,12 @@
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.fileSystemWatcher = new System.IO.FileSystemWatcher();
+            this.btnTargetFolder = new System.Windows.Forms.Button();
+            this.lblTargetFolder = new System.Windows.Forms.Label();
+            this.txbxTargetFolder = new System.Windows.Forms.TextBox();
+            this.pbxDot = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxDot)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOnOff
@@ -83,7 +88,7 @@
             // 
             this.lblDestinationFolder.AutoSize = true;
             this.lblDestinationFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDestinationFolder.Location = new System.Drawing.Point(12, 97);
+            this.lblDestinationFolder.Location = new System.Drawing.Point(12, 161);
             this.lblDestinationFolder.Name = "lblDestinationFolder";
             this.lblDestinationFolder.Size = new System.Drawing.Size(164, 17);
             this.lblDestinationFolder.TabIndex = 3;
@@ -92,7 +97,7 @@
             // txbxDestinationFolder
             // 
             this.txbxDestinationFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbxDestinationFolder.Location = new System.Drawing.Point(15, 117);
+            this.txbxDestinationFolder.Location = new System.Drawing.Point(15, 181);
             this.txbxDestinationFolder.Name = "txbxDestinationFolder";
             this.txbxDestinationFolder.ReadOnly = true;
             this.txbxDestinationFolder.Size = new System.Drawing.Size(235, 21);
@@ -101,7 +106,7 @@
             // btnChangeFolder
             // 
             this.btnChangeFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChangeFolder.Location = new System.Drawing.Point(15, 144);
+            this.btnChangeFolder.Location = new System.Drawing.Point(15, 208);
             this.btnChangeFolder.Name = "btnChangeFolder";
             this.btnChangeFolder.Size = new System.Drawing.Size(235, 28);
             this.btnChangeFolder.TabIndex = 5;
@@ -113,7 +118,7 @@
             // 
             this.lblEncryptFiles.AutoSize = true;
             this.lblEncryptFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEncryptFiles.Location = new System.Drawing.Point(12, 196);
+            this.lblEncryptFiles.Location = new System.Drawing.Point(12, 248);
             this.lblEncryptFiles.Name = "lblEncryptFiles";
             this.lblEncryptFiles.Size = new System.Drawing.Size(118, 17);
             this.lblEncryptFiles.TabIndex = 6;
@@ -122,7 +127,7 @@
             // txbxEncryptFolder
             // 
             this.txbxEncryptFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txbxEncryptFolder.Location = new System.Drawing.Point(15, 216);
+            this.txbxEncryptFolder.Location = new System.Drawing.Point(15, 268);
             this.txbxEncryptFolder.Name = "txbxEncryptFolder";
             this.txbxEncryptFolder.ReadOnly = true;
             this.txbxEncryptFolder.Size = new System.Drawing.Size(235, 21);
@@ -131,7 +136,7 @@
             // btnChooseFolder
             // 
             this.btnChooseFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChooseFolder.Location = new System.Drawing.Point(15, 243);
+            this.btnChooseFolder.Location = new System.Drawing.Point(15, 295);
             this.btnChooseFolder.Name = "btnChooseFolder";
             this.btnChooseFolder.Size = new System.Drawing.Size(235, 28);
             this.btnChooseFolder.TabIndex = 8;
@@ -143,7 +148,7 @@
             // 
             this.btnEncrypt.Enabled = false;
             this.btnEncrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEncrypt.Location = new System.Drawing.Point(256, 243);
+            this.btnEncrypt.Location = new System.Drawing.Point(256, 295);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(82, 28);
             this.btnEncrypt.TabIndex = 9;
@@ -155,7 +160,7 @@
             // 
             this.lblDecryptFile.AutoSize = true;
             this.lblDecryptFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDecryptFile.Location = new System.Drawing.Point(12, 296);
+            this.lblDecryptFile.Location = new System.Drawing.Point(12, 339);
             this.lblDecryptFile.Name = "lblDecryptFile";
             this.lblDecryptFile.Size = new System.Drawing.Size(109, 17);
             this.lblDecryptFile.TabIndex = 10;
@@ -164,7 +169,7 @@
             // btnChooseFile
             // 
             this.btnChooseFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnChooseFile.Location = new System.Drawing.Point(15, 316);
+            this.btnChooseFile.Location = new System.Drawing.Point(15, 359);
             this.btnChooseFile.Name = "btnChooseFile";
             this.btnChooseFile.Size = new System.Drawing.Size(235, 28);
             this.btnChooseFile.TabIndex = 12;
@@ -176,7 +181,7 @@
             // 
             this.btnDecrypt.Enabled = false;
             this.btnDecrypt.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDecrypt.Location = new System.Drawing.Point(256, 316);
+            this.btnDecrypt.Location = new System.Drawing.Point(256, 359);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(82, 28);
             this.btnDecrypt.TabIndex = 13;
@@ -188,7 +193,7 @@
             // 
             this.lblNote.AutoSize = true;
             this.lblNote.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNote.Location = new System.Drawing.Point(12, 347);
+            this.lblNote.Location = new System.Drawing.Point(12, 390);
             this.lblNote.Name = "lblNote";
             this.lblNote.Size = new System.Drawing.Size(282, 13);
             this.lblNote.TabIndex = 14;
@@ -200,11 +205,54 @@
             this.fileSystemWatcher.SynchronizingObject = this;
             this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.OnCreated);
             // 
+            // btnTargetFolder
+            // 
+            this.btnTargetFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTargetFolder.Location = new System.Drawing.Point(15, 120);
+            this.btnTargetFolder.Name = "btnTargetFolder";
+            this.btnTargetFolder.Size = new System.Drawing.Size(235, 28);
+            this.btnTargetFolder.TabIndex = 15;
+            this.btnTargetFolder.Text = "CHOOSE TARGET FOLDER";
+            this.btnTargetFolder.UseVisualStyleBackColor = true;
+            this.btnTargetFolder.Click += new System.EventHandler(this.btnTargetFolder_Click);
+            // 
+            // lblTargetFolder
+            // 
+            this.lblTargetFolder.AutoSize = true;
+            this.lblTargetFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTargetFolder.Location = new System.Drawing.Point(12, 73);
+            this.lblTargetFolder.Name = "lblTargetFolder";
+            this.lblTargetFolder.Size = new System.Drawing.Size(125, 17);
+            this.lblTargetFolder.TabIndex = 16;
+            this.lblTargetFolder.Text = "TARGET FOLDER";
+            // 
+            // txbxTargetFolder
+            // 
+            this.txbxTargetFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txbxTargetFolder.Location = new System.Drawing.Point(15, 93);
+            this.txbxTargetFolder.Name = "txbxTargetFolder";
+            this.txbxTargetFolder.ReadOnly = true;
+            this.txbxTargetFolder.Size = new System.Drawing.Size(235, 21);
+            this.txbxTargetFolder.TabIndex = 17;
+            // 
+            // pbxDot
+            // 
+            this.pbxDot.InitialImage = null;
+            this.pbxDot.Location = new System.Drawing.Point(299, 22);
+            this.pbxDot.Name = "pbxDot";
+            this.pbxDot.Size = new System.Drawing.Size(25, 25);
+            this.pbxDot.TabIndex = 18;
+            this.pbxDot.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 441);
+            this.Controls.Add(this.pbxDot);
+            this.Controls.Add(this.txbxTargetFolder);
+            this.Controls.Add(this.lblTargetFolder);
+            this.Controls.Add(this.btnTargetFolder);
             this.Controls.Add(this.lblNote);
             this.Controls.Add(this.btnDecrypt);
             this.Controls.Add(this.btnChooseFile);
@@ -222,6 +270,7 @@
             this.Name = "MainForm";
             this.Text = "ZI Zad 1";
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxDot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,6 +295,10 @@
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.IO.FileSystemWatcher fileSystemWatcher;
+        private System.Windows.Forms.TextBox txbxTargetFolder;
+        private System.Windows.Forms.Label lblTargetFolder;
+        private System.Windows.Forms.Button btnTargetFolder;
+        private System.Windows.Forms.PictureBox pbxDot;
     }
 }
 
