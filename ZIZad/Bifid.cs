@@ -57,8 +57,6 @@ namespace ZIZad
                     j = 0;
                     readLine = sr.ReadLine();
                 }
-
-                sr.Close();
             }
 
         }
@@ -94,7 +92,6 @@ namespace ZIZad
 
                     sw.WriteLine();
                 }
-                sw.Close();
             }
         }
 
@@ -181,7 +178,7 @@ namespace ZIZad
             {
                 if (newValue[i] == ' ')
                 {
-                    //encryptedPlaintext += " ";
+                    encryptedPlaintext += " ";
                     i++;
                 }
                 encryptedPlaintext += keySquare[Int32.Parse(newValue[i].ToString()) - 1, Int32.Parse(newValue[i+1].ToString()) - 1];
@@ -274,7 +271,7 @@ namespace ZIZad
 
             List<string> plaintextLines = new List<string>();
 
-            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 string line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
@@ -282,8 +279,6 @@ namespace ZIZad
                     plaintextLines.Add(line);
                     line = sr.ReadLine();
                 }
-
-                sr.Close();
             }
 
             string[] rcValues;
@@ -311,7 +306,7 @@ namespace ZIZad
 
             List<string> plaintextLines = new List<string>();
 
-            using (StreamReader sr = new StreamReader(filePath))
+            using (StreamReader sr = new StreamReader((new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
             {
                 string line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
@@ -319,8 +314,6 @@ namespace ZIZad
                     plaintextLines.Add(line);
                     line = sr.ReadLine();
                 }
-
-                sr.Close();
             }
 
             string temp2;

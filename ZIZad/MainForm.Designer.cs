@@ -201,7 +201,6 @@
             // 
             // fileSystemWatcher
             // 
-            this.fileSystemWatcher.EnableRaisingEvents = true;
             this.fileSystemWatcher.SynchronizingObject = this;
             this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.OnCreated);
             // 

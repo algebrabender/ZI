@@ -44,14 +44,12 @@ namespace ZIZad
 
         private void WriteIntoDestinationFolder(List<string> fileLines, string fileName)
         {
-            using (StreamWriter sw = new StreamWriter(fileName))
+            using (StreamWriter sw = new StreamWriter((new FileStream(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
             {
                 foreach (var item in fileLines)
                 {
                     sw.WriteLine(item);
                 }
-
-                sw.Close();
             }
         }
 
@@ -182,6 +180,12 @@ namespace ZIZad
 
         private void btnEncrypt_Click(object sender, EventArgs e)
         {
+            if (String.IsNullOrEmpty(txbxDestinationFolder.Text))
+            {
+                MessageBox.Show("Destination Folder must be chosen first!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             List<string> encryptedFileLines = new List<string>();
             List<FileInfo> fileInfos = this.encryptDirectoryInfo.GetFiles().ToList();
             List<FileInfo> onlyTxts = fileInfos.Where(fi => fi.Extension == ".txt").ToList();
@@ -193,6 +197,9 @@ namespace ZIZad
                 
                 this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", "Encrypted.txt"));
             }
+
+            fileInfos.Clear();
+            onlyTxts.Clear();
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)
