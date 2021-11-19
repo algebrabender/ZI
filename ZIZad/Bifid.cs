@@ -30,19 +30,22 @@ namespace ZIZad
             if (fileName.Contains("Decrypted"))
                 fileName = fileName.Replace("Decrypted", "");
 
-            if (!File.Exists("..\\..\\Key Squares\\" + fileName))
+            string filePath = "Key Squares" + fileName;
+
+
+            if (!File.Exists(filePath))
             {
                 this.GenerateAndSaveKeySquareAndPeriod(fileName);
                 return;
             }
 
-            using (StreamReader sr = new StreamReader("..\\..\\Key Squares\\" + fileName))
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 string readLine = sr.ReadLine();
                 int i = 0;
                 int j = 0;
 
-                while(i < 5)
+                while (i < 5)
                 {
                     foreach (var item in readLine)
                     {
@@ -61,9 +64,14 @@ namespace ZIZad
 
         }
 
-        public void GenerateAndSaveKeySquareAndPeriod(string fileName)
+        private void GenerateAndSaveKeySquareAndPeriod(string fileName)
         {
-            using (StreamWriter sw = new StreamWriter("..\\..\\Key Squares\\" + fileName, false))
+            if (!Directory.Exists("Key Squares"))
+                Directory.CreateDirectory("Key Squares");
+
+            string filePath = "Key Squares\\" + fileName;
+
+            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 Random rand = new Random();
                 List<char> showedLetters = new List<char>();
@@ -178,7 +186,7 @@ namespace ZIZad
             {
                 if (newValue[i] == ' ')
                 {
-                    encryptedPlaintext += " ";
+                    //encryptedPlaintext += " ";
                     i++;
                 }
                 encryptedPlaintext += keySquare[Int32.Parse(newValue[i].ToString()) - 1, Int32.Parse(newValue[i+1].ToString()) - 1];
@@ -271,6 +279,7 @@ namespace ZIZad
 
             List<string> plaintextLines = new List<string>();
 
+            //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
             using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 string line = sr.ReadLine();
@@ -306,6 +315,7 @@ namespace ZIZad
 
             List<string> plaintextLines = new List<string>();
 
+            //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
             using (StreamReader sr = new StreamReader((new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
             {
                 string line = sr.ReadLine();

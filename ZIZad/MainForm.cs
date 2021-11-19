@@ -44,7 +44,7 @@ namespace ZIZad
 
         private void WriteIntoDestinationFolder(List<string> fileLines, string fileName)
         {
-            using (StreamWriter sw = new StreamWriter((new FileStream(fileName, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
+            using (StreamWriter sw = new StreamWriter(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 foreach (var item in fileLines)
                 {

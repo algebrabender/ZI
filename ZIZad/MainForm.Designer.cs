@@ -91,7 +91,7 @@
             this.lblDestinationFolder.Location = new System.Drawing.Point(12, 161);
             this.lblDestinationFolder.Name = "lblDestinationFolder";
             this.lblDestinationFolder.Size = new System.Drawing.Size(164, 17);
-            this.lblDestinationFolder.TabIndex = 3;
+            this.lblDestinationFolder.TabIndex = 30;
             this.lblDestinationFolder.Text = "DESTINATION FOLDER:";
             // 
             // txbxDestinationFolder
@@ -102,6 +102,7 @@
             this.txbxDestinationFolder.ReadOnly = true;
             this.txbxDestinationFolder.Size = new System.Drawing.Size(235, 21);
             this.txbxDestinationFolder.TabIndex = 4;
+            this.txbxDestinationFolder.TabStop = false;
             // 
             // btnChangeFolder
             // 
@@ -109,7 +110,7 @@
             this.btnChangeFolder.Location = new System.Drawing.Point(15, 208);
             this.btnChangeFolder.Name = "btnChangeFolder";
             this.btnChangeFolder.Size = new System.Drawing.Size(235, 28);
-            this.btnChangeFolder.TabIndex = 5;
+            this.btnChangeFolder.TabIndex = 2;
             this.btnChangeFolder.Text = "CHANGE DESTINATION FOLDER";
             this.btnChangeFolder.UseVisualStyleBackColor = true;
             this.btnChangeFolder.Click += new System.EventHandler(this.btnChangeFolder_Click);
@@ -121,7 +122,7 @@
             this.lblEncryptFiles.Location = new System.Drawing.Point(12, 248);
             this.lblEncryptFiles.Name = "lblEncryptFiles";
             this.lblEncryptFiles.Size = new System.Drawing.Size(118, 17);
-            this.lblEncryptFiles.TabIndex = 6;
+            this.lblEncryptFiles.TabIndex = 60;
             this.lblEncryptFiles.Text = "ENCRYPT FILES:";
             // 
             // txbxEncryptFolder
@@ -132,6 +133,7 @@
             this.txbxEncryptFolder.ReadOnly = true;
             this.txbxEncryptFolder.Size = new System.Drawing.Size(235, 21);
             this.txbxEncryptFolder.TabIndex = 7;
+            this.txbxEncryptFolder.TabStop = false;
             // 
             // btnChooseFolder
             // 
@@ -139,7 +141,7 @@
             this.btnChooseFolder.Location = new System.Drawing.Point(15, 295);
             this.btnChooseFolder.Name = "btnChooseFolder";
             this.btnChooseFolder.Size = new System.Drawing.Size(235, 28);
-            this.btnChooseFolder.TabIndex = 8;
+            this.btnChooseFolder.TabIndex = 3;
             this.btnChooseFolder.Text = "CHOOSE FOLDER";
             this.btnChooseFolder.UseVisualStyleBackColor = true;
             this.btnChooseFolder.Click += new System.EventHandler(this.btnChooseFolder_Click);
@@ -151,7 +153,7 @@
             this.btnEncrypt.Location = new System.Drawing.Point(256, 295);
             this.btnEncrypt.Name = "btnEncrypt";
             this.btnEncrypt.Size = new System.Drawing.Size(82, 28);
-            this.btnEncrypt.TabIndex = 9;
+            this.btnEncrypt.TabIndex = 4;
             this.btnEncrypt.Text = "ENCRYPT";
             this.btnEncrypt.UseVisualStyleBackColor = true;
             this.btnEncrypt.Click += new System.EventHandler(this.btnEncrypt_Click);
@@ -172,7 +174,7 @@
             this.btnChooseFile.Location = new System.Drawing.Point(15, 359);
             this.btnChooseFile.Name = "btnChooseFile";
             this.btnChooseFile.Size = new System.Drawing.Size(235, 28);
-            this.btnChooseFile.TabIndex = 12;
+            this.btnChooseFile.TabIndex = 5;
             this.btnChooseFile.Text = "CHOOSE FILE";
             this.btnChooseFile.UseVisualStyleBackColor = true;
             this.btnChooseFile.Click += new System.EventHandler(this.btnChooseFile_Click);
@@ -184,7 +186,7 @@
             this.btnDecrypt.Location = new System.Drawing.Point(256, 359);
             this.btnDecrypt.Name = "btnDecrypt";
             this.btnDecrypt.Size = new System.Drawing.Size(82, 28);
-            this.btnDecrypt.TabIndex = 13;
+            this.btnDecrypt.TabIndex = 6;
             this.btnDecrypt.Text = "DECRYPT";
             this.btnDecrypt.UseVisualStyleBackColor = true;
             this.btnDecrypt.Click += new System.EventHandler(this.btnDecrypt_Click);
@@ -201,6 +203,7 @@
             // 
             // fileSystemWatcher
             // 
+            this.fileSystemWatcher.EnableRaisingEvents = true;
             this.fileSystemWatcher.SynchronizingObject = this;
             this.fileSystemWatcher.Created += new System.IO.FileSystemEventHandler(this.OnCreated);
             // 
@@ -210,7 +213,7 @@
             this.btnTargetFolder.Location = new System.Drawing.Point(15, 120);
             this.btnTargetFolder.Name = "btnTargetFolder";
             this.btnTargetFolder.Size = new System.Drawing.Size(235, 28);
-            this.btnTargetFolder.TabIndex = 15;
+            this.btnTargetFolder.TabIndex = 1;
             this.btnTargetFolder.Text = "CHOOSE TARGET FOLDER";
             this.btnTargetFolder.UseVisualStyleBackColor = true;
             this.btnTargetFolder.Click += new System.EventHandler(this.btnTargetFolder_Click);
@@ -233,6 +236,7 @@
             this.txbxTargetFolder.ReadOnly = true;
             this.txbxTargetFolder.Size = new System.Drawing.Size(235, 21);
             this.txbxTargetFolder.TabIndex = 17;
+            this.txbxTargetFolder.TabStop = false;
             // 
             // pbxDot
             // 
@@ -266,7 +270,12 @@
             this.Controls.Add(this.lblOnOff);
             this.Controls.Add(this.lblFileSystemWatcher);
             this.Controls.Add(this.btnOnOff);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(480, 480);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(480, 480);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ZI Zad 1";
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbxDot)).EndInit();
