@@ -165,9 +165,9 @@ namespace ZIZad
 
         private void btnChooseFile_Click(object sender, EventArgs e)
         {
-            openFileDialog.InitialDirectory = this.destinationFolderPath;
             openFileDialog.FileName = "";
             openFileDialog.Filter = "Text files (*.txt)|*.txt";
+            openFileDialog.InitialDirectory = "";
             openFileDialog.ShowDialog();
 
             if (String.IsNullOrEmpty(openFileDialog.FileName))
@@ -195,7 +195,7 @@ namespace ZIZad
                 encryptedFileLines.Clear();
                 encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(file.FullName));
                 
-                this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", "Encrypted.txt"));
+                this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", " Encrypted.txt"));
             }
 
             fileInfos.Clear();
@@ -216,7 +216,12 @@ namespace ZIZad
             }
 
             string[] splited = this.decryptFilePath.Split('\\');
-            string fileName = splited[splited.Length - 1].Replace("Encrypted.txt", "Decrypted.txt");
+            string fileName;
+
+            if (splited[splited.Length - 1].Contains("Encrypted.txt"))
+                fileName = splited[splited.Length - 1].Replace(" Encrypted.txt", " Decrypted.txt");
+            else
+                fileName = splited[splited.Length - 1].Replace(".txt", " Decrypted.txt");
 
             this.WriteIntoDestinationFolder(decrytedFileLines, folderBrowserDialog.SelectedPath + "\\" + fileName);
 
@@ -232,7 +237,7 @@ namespace ZIZad
             encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(newFilePath));
 
             string[] splited = newFilePath.Split('\\');
-            string fileName = splited[splited.Length - 1].Replace(".txt", "Encrypted.txt");
+            string fileName = splited[splited.Length - 1].Replace(".txt", " Encrypted.txt");
 
             this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + fileName);
         }

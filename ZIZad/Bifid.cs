@@ -26,11 +26,11 @@ namespace ZIZad
         private void LoadKeySquareAndPeriod(string fileName)
         {
             if (fileName.Contains("Encrypted"))
-                fileName = fileName.Replace("Encrypted", "");
+                fileName = fileName.Replace(" Encrypted", "");
             if (fileName.Contains("Decrypted"))
-                fileName = fileName.Replace("Decrypted", "");
+                fileName = fileName.Replace(" Decrypted", "");
 
-            string filePath = "Key Squares" + fileName;
+            string filePath = "Key Squares\\" + fileName;
 
 
             if (!File.Exists(filePath))
@@ -81,7 +81,7 @@ namespace ZIZad
                     {
                         int charNumb = rand.Next(97, 123);
                         char letter = Convert.ToChar(charNumb);
-                        if (letter == 'i')
+                        if (letter == 'i' && !showedLetters.Contains(letter))
                         {
                             iIndexI = i;
                             iIndexJ = j;
