@@ -106,7 +106,7 @@ namespace ZIZad
         private void stepOneEncrypt(string plaintext, out string[] values)
         {
             values = new string[2]; //values[0] - row, values[1] - col
-            bool foundJ = false;
+            bool foundLetter = false;
 
             foreach (var item in plaintext)
             {
@@ -129,19 +129,21 @@ namespace ZIZad
                             values[0] += (iIndexI + 1).ToString();
                             values[1] += (iIndexJ + 1).ToString();
 
-                            foundJ = true;
+                            foundLetter = true;
                             break;
                         }
                         else if (keySquare[i, j] == item)
                         {
                             values[0] += (i + 1).ToString();
                             values[1] += (j + 1).ToString();
+
+                            foundLetter = true;
+                            break;
                         }
-                    }
-                    
-                    if (foundJ)
+                    }                
+                    if (foundLetter)
                     {
-                        foundJ = false;
+                        foundLetter = false;
                         break;
                     }
                 }
@@ -216,7 +218,7 @@ namespace ZIZad
         private void stepTwoDecrypt(string newValue, out string value)
         {
             value = "";
-            bool found = false;
+            bool foundLetter = false;
 
             for(int k = 0; k < newValue.Length; k++)
             { 
@@ -231,13 +233,13 @@ namespace ZIZad
                         if (newValue[k] == keySquare[i, j])
                         {
                             value += (i + 1).ToString() + (j + 1).ToString();
-                            found = true;
+                            foundLetter = true;
                             break;
                         }
                     }
-                    if (found)
+                    if (foundLetter)
                     {
-                        found = false;
+                        foundLetter = false;
                         break;
                     }
                 }
