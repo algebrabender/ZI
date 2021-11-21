@@ -116,6 +116,10 @@ namespace ZIZad
                     values[1] += " ";
                     continue;
                 }
+
+                if (!Char.IsLetter(item)) //ignorisanje bilo kog drugog znaka ili broja
+                    continue;
+
                 for (int i = 0; i < 5; i++)
                 {
                     for (int j = 0; j < 5; j++)
@@ -297,7 +301,7 @@ namespace ZIZad
             foreach (var item in plaintextLines)
             {
                 string temp;
-                this.stepOneEncrypt(item, out rcValues);
+                this.stepOneEncrypt(item.ToLower(), out rcValues);
                 this.stepTwoEncrypt(rcValues);
                 this.stepThreeEncrypt(rcValues, out rcTogether);
                 this.stepFourEncrypt(rcTogether, out temp);

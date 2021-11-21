@@ -22,8 +22,6 @@ namespace ZIZad
         private string encryptFolderPath;
         private DirectoryInfo encryptDirectoryInfo;
         private string decryptFilePath;
-        private string redDotPath = "..\\..\\RedDot.ico";
-        private string greenDotPath = "..\\..\\GreenDot.ico";
 
         private Bifid cryptoAlgorithm;
 
@@ -36,8 +34,6 @@ namespace ZIZad
             cryptoAlgorithm = new Bifid();
 
             InitializeComponent();
-
-            pbxDot.Image = Image.FromFile(redDotPath);
         }
 
         #region Methodes
@@ -82,7 +78,6 @@ namespace ZIZad
                 btnEncrypt.Enabled = false;
                 btnChooseFile.Enabled = false;
                 btnDecrypt.Enabled = false;
-                pbxDot.Image = Image.FromFile(greenDotPath);
 
                 fileSystemWatcher = new FileSystemWatcher();
                 fileSystemWatcher.Path = this.targetFolderPath;
@@ -99,7 +94,6 @@ namespace ZIZad
                 btnChangeFolder.Enabled = true;
                 btnChooseFolder.Enabled = true;
                 btnChooseFile.Enabled = true;
-                pbxDot.Image = Image.FromFile(redDotPath);
 
                 fileSystemWatcher.EnableRaisingEvents = false;
             }
@@ -200,6 +194,8 @@ namespace ZIZad
 
             fileInfos.Clear();
             onlyTxts.Clear();
+
+            btnEncrypt.Enabled = false;
         }
 
         private void btnDecrypt_Click(object sender, EventArgs e)

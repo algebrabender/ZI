@@ -48,9 +48,7 @@
             this.btnTargetFolder = new System.Windows.Forms.Button();
             this.lblTargetFolder = new System.Windows.Forms.Label();
             this.txbxTargetFolder = new System.Windows.Forms.TextBox();
-            this.pbxDot = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDot)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOnOff
@@ -238,21 +236,11 @@
             this.txbxTargetFolder.TabIndex = 17;
             this.txbxTargetFolder.TabStop = false;
             // 
-            // pbxDot
-            // 
-            this.pbxDot.InitialImage = null;
-            this.pbxDot.Location = new System.Drawing.Point(299, 22);
-            this.pbxDot.Name = "pbxDot";
-            this.pbxDot.Size = new System.Drawing.Size(25, 25);
-            this.pbxDot.TabIndex = 18;
-            this.pbxDot.TabStop = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 441);
-            this.Controls.Add(this.pbxDot);
             this.Controls.Add(this.txbxTargetFolder);
             this.Controls.Add(this.lblTargetFolder);
             this.Controls.Add(this.btnTargetFolder);
@@ -278,7 +266,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ZI Zad 1";
             ((System.ComponentModel.ISupportInitialize)(this.fileSystemWatcher)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbxDot)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -306,7 +293,6 @@
         private System.Windows.Forms.TextBox txbxTargetFolder;
         private System.Windows.Forms.Label lblTargetFolder;
         private System.Windows.Forms.Button btnTargetFolder;
-        private System.Windows.Forms.PictureBox pbxDot;
     }
 }
 
