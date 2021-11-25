@@ -23,15 +23,17 @@ namespace ZIZad
         private DirectoryInfo encryptDirectoryInfo;
         private string decryptFilePath;
 
-        private Bifid cryptoAlgorithm;
+        private Bifid cryptoAlgorithmBifid;
+        private Knapsack cryptoAlgorithmKnapsack;
+        private int chosenAlgorithm = -1; //0 - bifid, 1 - knapsnack
 
         #endregion
 
         public MainForm()
         {
-            fswOnOff = false;
+            cryptoAlgorithmBifid = new Bifid();
 
-            cryptoAlgorithm = new Bifid();
+            cryptoAlgorithmKnapsack = new Knapsack();
 
             InitializeComponent();
         }
@@ -52,6 +54,36 @@ namespace ZIZad
         #endregion
 
         #region EventHandlers
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            fswOnOff = false;
+
+            cmbxChooseAlgorithm.Items.Add("BiFid Algorithm");
+            cmbxChooseAlgorithm.Items.Add("KnapSnack Algorithm");
+
+            btnChangeFolder.Enabled = false;
+            btnChooseFile.Enabled = false;
+            btnChooseFolder.Enabled = false;
+            btnOnOff.Enabled = false;
+            btnTargetFolder.Enabled = false;
+            btnDecrypt.Enabled = false;
+            btnEncrypt.Enabled = false;
+        }
+
+        private void cmbxChooseAlgorithm_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbxChooseAlgorithm.SelectedIndex == -1)
+                return;
+
+            chosenAlgorithm = cmbxChooseAlgorithm.SelectedIndex;
+
+            btnChangeFolder.Enabled = true;
+            btnChooseFile.Enabled = true;
+            btnChooseFolder.Enabled = true;
+            btnOnOff.Enabled = true;
+            btnTargetFolder.Enabled = true;
+        }
 
         private void btnOnOff_Click(object sender, EventArgs e)
         {
@@ -184,10 +216,12 @@ namespace ZIZad
             List<FileInfo> fileInfos = this.encryptDirectoryInfo.GetFiles().ToList();
             List<FileInfo> onlyTxts = fileInfos.Where(fi => fi.Extension == ".txt").ToList();
             
+            //TODO: POZIV ODGOVARAJUCEG ALGORITMA
+
             foreach (var file in onlyTxts)
             {
                 encryptedFileLines.Clear();
-                encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(file.FullName));
+                encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(file.FullName));
                 
                 this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", " Encrypted.txt"));
             }
@@ -200,7 +234,9 @@ namespace ZIZad
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            List<string> decrytedFileLines = this.cryptoAlgorithm.Decrypt(this.decryptFilePath);
+            //TODO: POZIV ODGOVARAJUCEG ALGORITMA
+
+            List<string> decrytedFileLines = this.cryptoAlgorithmBifid.Decrypt(this.decryptFilePath);
 
             folderBrowserDialog.SelectedPath = "";
             folderBrowserDialog.ShowDialog();
@@ -230,7 +266,7 @@ namespace ZIZad
 
             List<string> encryptedFileLines = new List<string>();
 
-            encryptedFileLines.AddRange(this.cryptoAlgorithm.Encrypt(newFilePath));
+            encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(newFilePath));
 
             string[] splited = newFilePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace(".txt", " Encrypted.txt");

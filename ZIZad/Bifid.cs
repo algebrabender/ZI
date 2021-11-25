@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ZIZad
 {
-    internal class Bifid
+    internal class Bifid : CryptoAlgorithm
     {
         #region Attributes
 
