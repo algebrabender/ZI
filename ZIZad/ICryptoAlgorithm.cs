@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace ZIZad
 {
-    internal interface CryptoAlgorithm
+    internal interface ICryptoAlgorithm
     {
         List<string> Encrypt(string filePath);
         List<string> Decrypt(string filePath);
 
-        //TODO: POTENCIJALNO PREBACITI STEPS I GENERATE/LOAD
+        void GenerateAndSaveKey(string fileName);
+        void LoadKey(string fileName);
+
+        //TODO: POTENCIJALNO PREBACITI STEPS 
     }
 }

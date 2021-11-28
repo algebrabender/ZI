@@ -7,7 +7,7 @@ using System.IO;
 
 namespace ZIZad
 {
-    internal class Bifid : CryptoAlgorithm
+    internal class Bifid : ICryptoAlgorithm
     {
         #region Attributes
 
@@ -22,86 +22,6 @@ namespace ZIZad
         { }
 
         #region Methodes
-
-        private void LoadKeySquareAndPeriod(string fileName)
-        {
-            if (fileName.Contains("Encrypted"))
-                fileName = fileName.Replace(" Encrypted", "");
-            if (fileName.Contains("Decrypted"))
-                fileName = fileName.Replace(" Decrypted", "");
-
-            string filePath = "Key Squares\\" + fileName;
-
-
-            if (!File.Exists(filePath))
-            {
-                this.GenerateAndSaveKeySquareAndPeriod(fileName);
-                return;
-            }
-
-            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
-            {
-                string readLine = sr.ReadLine();
-                int i = 0;
-                int j = 0;
-
-                while (i < 5)
-                {
-                    foreach (var item in readLine)
-                    {
-                        if (item == 'i')
-                        {
-                            iIndexI = i;
-                            iIndexJ = j;
-                        }
-                        keySquare[i, j++] = item;
-                    }
-                    i++;
-                    j = 0;
-                    readLine = sr.ReadLine();
-                }
-            }
-
-        }
-
-        private void GenerateAndSaveKeySquareAndPeriod(string fileName)
-        {
-            if (!Directory.Exists("Key Squares"))
-                Directory.CreateDirectory("Key Squares");
-
-            string filePath = "Key Squares\\" + fileName;
-
-            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
-            {
-                Random rand = new Random();
-                List<char> showedLetters = new List<char>();
-                for (int i = 0; i < 5; i++)
-                {
-                    for (int j = 0; j < 5; j++)
-                    {
-                        int charNumb = rand.Next(97, 123);
-                        char letter = Convert.ToChar(charNumb);
-                        if (letter == 'i' && !showedLetters.Contains(letter))
-                        {
-                            iIndexI = i;
-                            iIndexJ = j;
-                        }
-                        if (letter == 'j' || showedLetters.Contains(letter))
-                        {
-                            j--;
-                            continue;
-                        }
-
-                        showedLetters.Add(letter);
-                        keySquare[i, j] = letter;
-
-                        sw.Write(letter);
-                    }
-
-                    sw.WriteLine();
-                }
-            }
-        }
 
         private void stepOneEncrypt(string plaintext, out string[] values)
         {
@@ -281,7 +201,7 @@ namespace ZIZad
         {
             string[] splited = filePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
-            this.LoadKeySquareAndPeriod(fileName);
+            this.LoadKey(fileName);
 
             List<string> plaintextLines = new List<string>();
 
@@ -317,7 +237,7 @@ namespace ZIZad
         {
             string[] splited = filePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
-            this.LoadKeySquareAndPeriod(fileName);
+            this.LoadKey(fileName);
 
             List<string> plaintextLines = new List<string>();
 
@@ -348,6 +268,85 @@ namespace ZIZad
             }
 
             return decryptedLines;
+        }
+
+        public void GenerateAndSaveKey(string fileName)
+        {
+            if (!Directory.Exists("Key Squares"))
+                Directory.CreateDirectory("Key Squares");
+
+            string filePath = "Key Squares\\" + fileName;
+
+            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            {
+                Random rand = new Random();
+                List<char> showedLetters = new List<char>();
+                for (int i = 0; i < 5; i++)
+                {
+                    for (int j = 0; j < 5; j++)
+                    {
+                        int charNumb = rand.Next(97, 123);
+                        char letter = Convert.ToChar(charNumb);
+                        if (letter == 'i' && !showedLetters.Contains(letter))
+                        {
+                            iIndexI = i;
+                            iIndexJ = j;
+                        }
+                        if (letter == 'j' || showedLetters.Contains(letter))
+                        {
+                            j--;
+                            continue;
+                        }
+
+                        showedLetters.Add(letter);
+                        keySquare[i, j] = letter;
+
+                        sw.Write(letter);
+                    }
+
+                    sw.WriteLine();
+                }
+            }
+        }
+
+        public void LoadKey(string fileName)
+        {
+            if (fileName.Contains("Encrypted"))
+                fileName = fileName.Replace(" Encrypted", "");
+            if (fileName.Contains("Decrypted"))
+                fileName = fileName.Replace(" Decrypted", "");
+
+            string filePath = "Key Squares\\" + fileName;
+
+
+            if (!File.Exists(filePath))
+            {
+                this.GenerateAndSaveKey(fileName);
+                return;
+            }
+
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            {
+                string readLine = sr.ReadLine();
+                int i = 0;
+                int j = 0;
+
+                while (i < 5)
+                {
+                    foreach (var item in readLine)
+                    {
+                        if (item == 'i')
+                        {
+                            iIndexI = i;
+                            iIndexJ = j;
+                        }
+                        keySquare[i, j++] = item;
+                    }
+                    i++;
+                    j = 0;
+                    readLine = sr.ReadLine();
+                }
+            }
         }
 
         #endregion
