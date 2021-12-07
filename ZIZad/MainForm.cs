@@ -215,14 +215,15 @@ namespace ZIZad
             List<string> encryptedFileLines = new List<string>();
             List<FileInfo> fileInfos = this.encryptDirectoryInfo.GetFiles().ToList();
             List<FileInfo> onlyTxts = fileInfos.Where(fi => fi.Extension == ".txt").ToList();
-            
-            //TODO: POZIV ODGOVARAJUCEG ALGORITMA
 
             foreach (var file in onlyTxts)
             {
                 encryptedFileLines.Clear();
-                encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(file.FullName));
-                
+                if (chosenAlgorithm == 0)
+                    encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(file.FullName));
+                else
+                    encryptedFileLines.AddRange(this.cryptoAlgorithmKnapsack.Encrypt(file.FullName));
+
                 this.WriteIntoDestinationFolder(encryptedFileLines, this.destinationFolderPath + "\\" + file.Name.Replace(".txt", " Encrypted.txt"));
             }
 
@@ -234,9 +235,11 @@ namespace ZIZad
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
-            //TODO: POZIV ODGOVARAJUCEG ALGORITMA
-
-            List<string> decrytedFileLines = this.cryptoAlgorithmBifid.Decrypt(this.decryptFilePath);
+            List<string> decrytedFileLines;
+            if (chosenAlgorithm == 0)
+                decrytedFileLines = this.cryptoAlgorithmBifid.Decrypt(this.decryptFilePath);
+            else
+                decrytedFileLines = this.cryptoAlgorithmKnapsack.Decrypt(this.decryptFilePath);
 
             folderBrowserDialog.SelectedPath = "";
             folderBrowserDialog.ShowDialog();
@@ -266,7 +269,10 @@ namespace ZIZad
 
             List<string> encryptedFileLines = new List<string>();
 
-            encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(newFilePath));
+            if (chosenAlgorithm == 0)
+                encryptedFileLines.AddRange(this.cryptoAlgorithmBifid.Encrypt(newFilePath));
+            else
+                encryptedFileLines.AddRange(this.cryptoAlgorithmKnapsack.Encrypt(newFilePath));
 
             string[] splited = newFilePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace(".txt", " Encrypted.txt");

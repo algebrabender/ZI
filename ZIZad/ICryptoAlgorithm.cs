@@ -13,7 +13,5 @@ namespace ZIZad
 
         void GenerateAndSaveKey(string fileName);
         void LoadKey(string fileName);
-
-        //TODO: POTENCIJALNO PREBACITI STEPS 
     }
 }

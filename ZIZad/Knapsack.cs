@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ZIZad
 {
@@ -21,90 +22,53 @@ namespace ZIZad
 
         public Knapsack()
         {
-            P = new int[16];
-            J = new int[16];
+            P = new int[8];
+            J = new int[8];
             this.GenerateAndSaveKey("");
-            List<byte[]> charsInBytes;
-            this.StepOneEncrypt("seulgi", out charsInBytes);
-            List<int> temp;
-            this.StepTwoEncrypt(charsInBytes, out temp);
-            List<int> temp2;
-            this.StepOneDecrypt(temp, out temp2);
-            List<byte[]> charsInBytes2;
-            this.StepTwoDecrypt(temp2, out charsInBytes2);
         }
 
         #region Methodes
 
-        private void StepOneEncrypt(string line, out List<byte[]> charsInBytes)
-        {
-            charsInBytes = new List<byte[]>();
-            
-            foreach (var item in line)
-               charsInBytes.Add(BitConverter.GetBytes(item));
-        }
-
-        private void StepTwoEncrypt(List<byte[]> charsInBytes, out List<int> encryptedValues)
-        {
-            encryptedValues = new List<int>();
-
-            int C = 0;
-            BitArray B;
-            foreach (var c in charsInBytes)
-            {
-                B = new BitArray(c);
-                for (int i = 0; i < B.Length; i++)
-                {
-                    int b = B[i] ? 1 : 0;
-                    C += J[i] * b;
-                }
-                encryptedValues.Add(C);
-            }
-        }
-
-        private void StepOneDecrypt(List<int> encryptedValues, out List<int> TCs)
-        {
-            TCs = new List<int>();
-            int TC = 0;
-            foreach (var C in encryptedValues)
-            {
-                TC = (C * im) % n;
-                TCs.Add(TC);
-            }
-        }
-
-        private void StepTwoDecrypt(List<int> TCs, out List<byte[]> charsInBytes)
-        {
-            charsInBytes = new List<byte[]>();
-            List<bool> factors;
-
-            foreach (var TC in TCs)
-            {
-                //FACTORING NOT WORKING WELL
-                factors = new List<bool>();
-                factors = this.Factor(TC);
-                BitArray bits = new BitArray(factors.ToArray());
-                byte[] b = new byte[2];
-                bits.CopyTo(b, 0);
-                char c = BitConverter.ToChar(b, 0);
-                Console.WriteLine(c);
-            }
-        }
-
         public List<string> Encrypt(string filePath)
         {
             string[] splited = filePath.Split('\\');
-            string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
-            this.LoadKey(fileName);
+            string fileName = splited[splited.Length - 1].Replace(".txt", "PublicKey.txt");
+            //this.LoadKey(fileName);
 
             List<string> plaintextLines = new List<string>();
             List<string> encryptedLines = new List<string>();
 
+            //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            {
+                string line = sr.ReadLine();
+                while (!String.IsNullOrEmpty(line))
+                {
+                    plaintextLines.Add(line);
+                    line = sr.ReadLine();
+                }
+            }
+
             foreach (var item in plaintextLines)
             {
-                List<byte[]> charsInBytes;
-                this.StepOneEncrypt(item, out charsInBytes);
-
+                string plaintext = "";
+                byte[] charsInBytes = Encoding.UTF8.GetBytes(item.ToCharArray());
+                BitArray B;
+                foreach (var c in charsInBytes)
+                {
+                    int C = 0;
+                    B = new BitArray(new byte[] { c });
+                    for (int i = B.Length - 1; i >= 0; i--)
+                    {
+                        int b = B[i] ? 1 : 0;
+                        Console.WriteLine(B[i]);
+                        if (b == 0)
+                            continue;
+                        C += J[i] * b;
+                    }
+                    plaintext += C.ToString() + " ";
+                }
+                encryptedLines.Add(plaintext);
             }
 
             return encryptedLines;
@@ -112,39 +76,131 @@ namespace ZIZad
 
         public List<string> Decrypt(string filePath)
         {
-            throw new NotImplementedException();
+            string[] splited = filePath.Split('\\');
+            string fileName = splited[splited.Length - 1].Replace(".txt", "PrivateKey.txt");
+            //this.LoadKey(fileName);
+            List<string> plaintextLines = new List<string>();
+
+            //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
+            using (StreamReader sr = new StreamReader((new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
+            {
+                string line = sr.ReadLine();
+                while (!String.IsNullOrEmpty(line))
+                {
+                    plaintextLines.Add(line);
+                    line = sr.ReadLine();
+                }
+            }
+
+            int TC;
+            string plaintext = "";
+            List<string> decryptedLines = new List<string>();
+
+            foreach (var item in plaintextLines)
+            {
+                plaintext = "";
+                string[] chars = item.Split(' ');
+                foreach (string C in chars)
+                {
+                    if (C == "")
+                        continue;
+                    TC = 0;
+                    TC = (Int32.Parse(C) * im) % n;
+                    if (TC < 0)
+                        TC += n;
+
+                    List<bool> factors;
+                    factors = new List<bool>();
+                    factors = this.Factors(TC);
+                    BitArray bits = new BitArray(Enumerable.Reverse(factors).ToArray());
+                    byte[] b = new byte[2];
+                    bits.CopyTo(b, 0);
+                    char c = BitConverter.ToChar(b, 0);
+                    plaintext += c;
+                }
+
+                decryptedLines.Add(plaintext);
+            }
+
+            return decryptedLines;
         }
 
         public void GenerateAndSaveKey(string fileName)
         {
-            int temp = 1;
-            int sum = 0;
+            int temp = 0;
             Random random = new Random();
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 8; i++)
             {
-                temp += random.Next(temp, (int)(temp * 1.5)); //tentative
+                temp += random.Next(temp + 1, temp + 5); //tentative
                 P[i] = temp;
-                sum += temp;
             }
 
-            n = random.Next(sum, sum * 2); //tentative
+            n = random.Next(temp, temp + 10); //tentative
 
             temp = random.Next(1, n);
             while (this.GCD(n, temp) != 1)
                 temp = random.Next(1, n);
             m = temp;
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 8; i++)
             {
                 J[i] = (P[i] * m) % n;
+                if (J[i] < 0)
+                    J[i] += n;
             }
 
             im = this.ModInverse(m, n);
+
+            //TODO: SAVE KEY
         }
 
         public void LoadKey(string fileName)
         {
-            throw new NotImplementedException();
+            bool encrypting;
+            if (fileName.Contains("Encrypted.txt"))
+            {
+                fileName = fileName.Replace(" Encrypted.txt", "PrivateKey.txt");
+                encrypting = false;
+            }
+            if (fileName.Contains("Decrypted.txt"))
+            {
+                fileName = fileName.Replace(" Decrypted.txt", "PublicKey.txt");
+                encrypting = true;
+            }
+            else
+            {
+                this.GenerateAndSaveKey(fileName);
+                return;
+            }
+
+            string filePath = "Keys\\" + fileName;
+
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            {
+                string readLine = sr.ReadLine();
+                if (encrypting)
+                {
+                    int i = 0;
+                    foreach (var item in readLine.Split(' '))
+                    {
+                        if (item == "")
+                            continue;
+                        Int32.TryParse(item, out J[i++]);
+                    }
+                }
+                else
+                {
+                    int i = 0;
+                    foreach (var item in readLine.Split(' '))
+                    {
+                        if (item == "")
+                            continue;
+                        Int32.TryParse(item, out P[i++]);
+                    }
+                    Int32.TryParse(sr.ReadLine(), out n);
+                    Int32.TryParse(sr.ReadLine(), out im);
+                }
+            }
         }
 
         private int GCD(int a, int b)
@@ -188,14 +244,13 @@ namespace ZIZad
             return x;
         }
 
-        private List<bool> Factor(int number)
+        private List<bool> Factors(int number)
         {
-            //NOT WORKING WELL
             List<bool> factors = new List<bool>();
-            
-            for (int i = 15; i >= 0; i--)
+
+            for (int i = 7; i >= 0; i--)
             {
-                if (number - P[i] > 0)
+                if (number - P[i] >= 0)
                 {
                     factors.Add(true);
                     number -= P[i];
