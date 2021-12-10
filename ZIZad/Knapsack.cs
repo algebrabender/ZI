@@ -24,7 +24,6 @@ namespace ZIZad
         {
             P = new int[8];
             J = new int[8];
-            this.GenerateAndSaveKey("");
         }
 
         #region Methodes
@@ -32,8 +31,8 @@ namespace ZIZad
         public List<string> Encrypt(string filePath)
         {
             string[] splited = filePath.Split('\\');
-            string fileName = splited[splited.Length - 1].Replace(".txt", "PublicKey.txt");
-            //this.LoadKey(fileName);
+            string fileName = splited[splited.Length - 1].Replace(".txt", "PrivateKey.txt");
+            this.GenerateAndSaveKey(fileName);
 
             List<string> plaintextLines = new List<string>();
             List<string> encryptedLines = new List<string>();
@@ -77,8 +76,8 @@ namespace ZIZad
         public List<string> Decrypt(string filePath)
         {
             string[] splited = filePath.Split('\\');
-            string fileName = splited[splited.Length - 1].Replace(".txt", "PrivateKey.txt");
-            //this.LoadKey(fileName);
+            string fileName = splited[splited.Length - 1];
+            this.LoadKey(fileName);
             List<string> plaintextLines = new List<string>();
 
             //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
@@ -151,21 +150,28 @@ namespace ZIZad
 
             im = this.ModInverse(m, n);
 
-            //TODO: SAVE KEY
+            if (!Directory.Exists("Keys"))
+                Directory.CreateDirectory("Keys");
+
+            string filePath = "Keys\\" + fileName;
+
+            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            {
+                foreach (int i in P)
+                {
+                    sw.Write(i + " ");
+                }
+                sw.WriteLine();
+                sw.WriteLine(n);
+                sw.Write(im);
+            }
         }
 
         public void LoadKey(string fileName)
         {
-            bool encrypting;
             if (fileName.Contains("Encrypted.txt"))
             {
                 fileName = fileName.Replace(" Encrypted.txt", "PrivateKey.txt");
-                encrypting = false;
-            }
-            if (fileName.Contains("Decrypted.txt"))
-            {
-                fileName = fileName.Replace(" Decrypted.txt", "PublicKey.txt");
-                encrypting = true;
             }
             else
             {
@@ -178,28 +184,15 @@ namespace ZIZad
             using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
                 string readLine = sr.ReadLine();
-                if (encrypting)
+                int i = 0;
+                foreach (var item in readLine.Split(' '))
                 {
-                    int i = 0;
-                    foreach (var item in readLine.Split(' '))
-                    {
-                        if (item == "")
-                            continue;
-                        Int32.TryParse(item, out J[i++]);
-                    }
+                    if (item == "")
+                        continue;
+                    Int32.TryParse(item, out P[i++]);
                 }
-                else
-                {
-                    int i = 0;
-                    foreach (var item in readLine.Split(' '))
-                    {
-                        if (item == "")
-                            continue;
-                        Int32.TryParse(item, out P[i++]);
-                    }
-                    Int32.TryParse(sr.ReadLine(), out n);
-                    Int32.TryParse(sr.ReadLine(), out im);
-                }
+                Int32.TryParse(sr.ReadLine(), out n);
+                Int32.TryParse(sr.ReadLine(), out im);
             }
         }
 
