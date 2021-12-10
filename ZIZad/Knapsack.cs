@@ -12,18 +12,19 @@ namespace ZIZad
     {
         #region Attributes
 
-        private int[] P; //deo privatnog kljuca
-        private int n; //deo privatnog kljuca
-        private int m;
-        private int[] J; //javni kljuc
-        private int im; //deo privatnog kljuca
+        private long[] P; //deo privatnog kljuca
+        private long n; //deo privatnog kljuca
+        private long m;
+        private long[] J; //javni kljuc
+        private long im; //deo privatnog kljuca
 
         #endregion
 
         public Knapsack()
         {
-            P = new int[8];
-            J = new int[8];
+            //korisice se polu rec da mi mogli da se kodiraju i nasa slova, odnosno karakteri koji su veci od jednog bajta 
+            P = new long[16];
+            J = new long[16];
         }
 
         #region Methodes
@@ -51,13 +52,18 @@ namespace ZIZad
             foreach (var item in plaintextLines)
             {
                 string plaintext = "";
-                byte[] charsInBytes = Encoding.UTF8.GetBytes(item.ToCharArray());
+                byte[] charsInBytes = Encoding.Unicode.GetBytes(item.ToCharArray());
                 BitArray B;
-                foreach (var c in charsInBytes)
+                for (int c = 0; c < charsInBytes.Length - 1; c += 2)
                 {
-                    int C = 0;
-                    B = new BitArray(new byte[] { c });
-                    for (int i = B.Length - 1; i >= 0; i--)
+                    long C = 0;
+                    int len;
+                    if (charsInBytes[c + 1] == (byte)0)
+                        len = 8;
+                    else
+                        len = 16;
+                    B = new BitArray(new byte[] { charsInBytes[c], charsInBytes[c+1] });
+                    for (int i = len - 1; i >= 0; i--)
                     {
                         int b = B[i] ? 1 : 0;
                         Console.WriteLine(B[i]);
@@ -91,7 +97,7 @@ namespace ZIZad
                 }
             }
 
-            int TC;
+            long TC;
             string plaintext = "";
             List<string> decryptedLines = new List<string>();
 
@@ -128,20 +134,20 @@ namespace ZIZad
         {
             int temp = 0;
             Random random = new Random();
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 16; i++)
             {
-                temp += random.Next(temp + 1, temp + 5); //tentative
+                temp += random.Next(temp + 1, temp + 3); //da bi se izbegli veliki brojevi
                 P[i] = temp;
             }
 
-            n = random.Next(temp, temp + 10); //tentative
+            n = random.Next(temp, temp + 3); //da bi se izbegli veliki brojevi
 
-            temp = random.Next(1, n);
+            temp = random.Next(1, (int)n/2); //da bi se izbegli veliki brojevi
             while (this.GCD(n, temp) != 1)
-                temp = random.Next(1, n);
+                temp = random.Next(1, (int)n/2);
             m = temp;
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 16; i++)
             {
                 J[i] = (P[i] * m) % n;
                 if (J[i] < 0)
@@ -189,16 +195,16 @@ namespace ZIZad
                 {
                     if (item == "")
                         continue;
-                    Int32.TryParse(item, out P[i++]);
+                    Int64.TryParse(item, out P[i++]);
                 }
-                Int32.TryParse(sr.ReadLine(), out n);
-                Int32.TryParse(sr.ReadLine(), out im);
+                Int64.TryParse(sr.ReadLine(), out n);
+                Int64.TryParse(sr.ReadLine(), out im);
             }
         }
 
-        private int GCD(int a, int b)
+        private long GCD(long a, long b)
         {
-            int temp;
+            long temp;
             
             while (b != 0)
             {
@@ -210,19 +216,19 @@ namespace ZIZad
             return a;
         }
 
-        private int ModInverse(int m, int n)
+        private long ModInverse(long  m, long n)
         {
-            int n0 = n;
-            int y = 0;
-            int x = 1;
+            long n0 = n;
+            long y = 0;
+            long x = 1;
 
             if (n == 1)
                 return 0;
 
             while (m > 1)
             {
-                int q = m / n;
-                int t = n;
+                long q = m / n;
+                long t = n;
                 n = m % n;
                 m = t;
                 t = y;
@@ -237,11 +243,11 @@ namespace ZIZad
             return x;
         }
 
-        private List<bool> Factors(int number)
+        private List<bool> Factors(long number)
         {
             List<bool> factors = new List<bool>();
 
-            for (int i = 7; i >= 0; i--)
+            for (int i = 15; i >= 0; i--)
             {
                 if (number - P[i] >= 0)
                 {

@@ -60,7 +60,7 @@ namespace ZIZad
             fswOnOff = false;
 
             cmbxChooseAlgorithm.Items.Add("BiFid Algorithm");
-            cmbxChooseAlgorithm.Items.Add("KnapSnack Algorithm");
+            cmbxChooseAlgorithm.Items.Add("KnapSack Algorithm");
 
             btnChangeFolder.Enabled = false;
             btnChooseFile.Enabled = false;
