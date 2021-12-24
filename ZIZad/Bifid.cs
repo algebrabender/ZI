@@ -15,6 +15,9 @@ namespace ZIZad
         private int period = 5;
         private int iIndexI; //da bi se smanjilo pretrazivanje
         private int iIndexJ;
+        private bool blockMode;
+
+        public bool BlockMode { get; set; }
 
         #endregion
 

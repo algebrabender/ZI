@@ -17,6 +17,9 @@ namespace ZIZad
         private long m;
         private long[] J; //javni kljuc
         private long im; //deo privatnog kljuca
+        private bool blockMode;
+
+        public bool BlockMode { get; set; }
 
         #endregion
 

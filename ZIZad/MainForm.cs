@@ -26,6 +26,7 @@ namespace ZIZad
         private Bifid cryptoAlgorithmBifid;
         private Knapsack cryptoAlgorithmKnapsack;
         private int chosenAlgorithm = -1; //0 - bifid, 1 - knapsnack
+        private bool blockModeOnOff;
 
         #endregion
 
@@ -58,10 +59,12 @@ namespace ZIZad
         private void MainForm_Load(object sender, EventArgs e)
         {
             fswOnOff = false;
+            blockModeOnOff = false;
 
             cmbxChooseAlgorithm.Items.Add("BiFid Algorithm");
             cmbxChooseAlgorithm.Items.Add("KnapSack Algorithm");
 
+            btnBlockModeOnOff.Enabled = false;
             btnChangeFolder.Enabled = false;
             btnChooseFile.Enabled = false;
             btnChooseFolder.Enabled = false;
@@ -78,11 +81,31 @@ namespace ZIZad
 
             chosenAlgorithm = cmbxChooseAlgorithm.SelectedIndex;
 
+            btnBlockModeOnOff.Enabled = true;
             btnChangeFolder.Enabled = true;
             btnChooseFile.Enabled = true;
             btnChooseFolder.Enabled = true;
             btnOnOff.Enabled = true;
             btnTargetFolder.Enabled = true;
+        }
+
+        private void btnBlockModeOnOff_Click(object sender, EventArgs e)
+        {
+            if (blockModeOnOff)
+            {
+                blockModeOnOff = false;
+                lblBlockModeOnOff.Text = "OFF";
+            }
+            else
+            {
+                blockModeOnOff = true;
+                lblBlockModeOnOff.Text = "ON";
+            }
+
+            if (chosenAlgorithm == 0)
+                this.cryptoAlgorithmBifid.BlockMode = blockModeOnOff;
+            else
+                this.cryptoAlgorithmKnapsack.BlockMode = blockModeOnOff;
         }
 
         private void btnOnOff_Click(object sender, EventArgs e)
