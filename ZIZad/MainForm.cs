@@ -43,7 +43,7 @@ namespace ZIZad
 
         private void WriteIntoDestinationFolder(List<string> fileLines, string fileName)
         {
-            using (StreamWriter sw = new StreamWriter(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            using (StreamWriter sw = new StreamWriter(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite), Encoding.Unicode))
             {
                 foreach (var item in fileLines)
                 {
@@ -103,9 +103,9 @@ namespace ZIZad
             }
 
             if (chosenAlgorithm == 0)
-                this.cryptoAlgorithmBifid.BlockMode = blockModeOnOff;
+                this.cryptoAlgorithmBifid.blockMode = blockModeOnOff;
             else
-                this.cryptoAlgorithmKnapsack.BlockMode = blockModeOnOff;
+                this.cryptoAlgorithmKnapsack.blockMode = blockModeOnOff;
         }
 
         private void btnOnOff_Click(object sender, EventArgs e)
@@ -258,11 +258,15 @@ namespace ZIZad
 
         private void btnDecrypt_Click(object sender, EventArgs e)
         {
+            bool sameHashes;
             List<string> decrytedFileLines;
             if (chosenAlgorithm == 0)
-                decrytedFileLines = this.cryptoAlgorithmBifid.Decrypt(this.decryptFilePath);
+                decrytedFileLines = this.cryptoAlgorithmBifid.Decrypt(this.decryptFilePath, out sameHashes);
             else
-                decrytedFileLines = this.cryptoAlgorithmKnapsack.Decrypt(this.decryptFilePath);
+                decrytedFileLines = this.cryptoAlgorithmKnapsack.Decrypt(this.decryptFilePath, out sameHashes);
+
+            if (!sameHashes)
+                MessageBox.Show("Hash values were not the same", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
             folderBrowserDialog.SelectedPath = "";
             folderBrowserDialog.ShowDialog();

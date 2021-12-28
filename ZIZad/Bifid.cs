@@ -15,9 +15,7 @@ namespace ZIZad
         private int period = 5;
         private int iIndexI; //da bi se smanjilo pretrazivanje
         private int iIndexJ;
-        private bool blockMode;
-
-        public bool BlockMode { get; set; }
+        public bool blockMode;
 
         #endregion
 
@@ -236,8 +234,10 @@ namespace ZIZad
             return encryptedLines;
         }
 
-        public List<string> Decrypt(string filePath)
+        public List<string> Decrypt(string filePath, out bool sameHashes)
         {
+            sameHashes = false;
+
             string[] splited = filePath.Split('\\');
             string fileName = splited[splited.Length - 1].Replace(".txt", "KeySquare.txt");
             this.LoadKey(fileName);
