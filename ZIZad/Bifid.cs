@@ -15,12 +15,16 @@ namespace ZIZad
         private int period = 5;
         private int iIndexI; //da bi se smanjilo pretrazivanje
         private int iIndexJ;
-        public bool blockMode;
+        //public bool blockMode;
+
+        private TigerHash tigerHash;
 
         #endregion
 
         public Bifid()
-        { }
+        {
+            tigerHash = new TigerHash();
+        }
 
         #region Methodes
 
@@ -220,16 +224,22 @@ namespace ZIZad
             string[] rcValues;
             string rcTogether;
             List<string> encryptedLines = new List<string>();
+            string oneLine = "";
 
             foreach (var item in plaintextLines)
             {
                 string temp;
+                oneLine += item.Replace(" ", "") + "\n";
                 this.stepOneEncrypt(item.ToLower(), out rcValues);
                 this.stepTwoEncrypt(rcValues);
                 this.stepThreeEncrypt(rcValues, out rcTogether);
                 this.stepFourEncrypt(rcTogether, out temp);
                 encryptedLines.Add(temp);
             }
+
+            byte[] hashedText = tigerHash.Process(oneLine);
+            string hashed = Encoding.Unicode.GetString(hashedText);
+            encryptedLines.Add(hashed);
 
             return encryptedLines;
         }
@@ -245,7 +255,7 @@ namespace ZIZad
             List<string> plaintextLines = new List<string>();
 
             //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
-            using (StreamReader sr = new StreamReader((new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite), Encoding.Unicode))
             {
                 string line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
@@ -260,15 +270,23 @@ namespace ZIZad
             string[] values;
             string plaintext;
             List<string> decryptedLines = new List<string>();
+            string oneLine = "";
 
-            foreach (var item in plaintextLines)
+            for (int i = 0; i < plaintextLines.Count - 1; i++)
             {
-                this.stepOneDecrypt(item, out temp2);
+                this.stepOneDecrypt(plaintextLines[i], out temp2);
                 this.stepTwoDecrypt(temp2, out temp3);
                 this.stepThreeDecrypt(temp3, out values);
                 this.stepFourDecrypt(values, out plaintext);
+                oneLine += plaintext + "\n";
                 decryptedLines.Add(plaintext);
             }
+
+            byte[] hashedText = tigerHash.Process(oneLine);
+            string hashed = Encoding.Unicode.GetString(hashedText);
+            string hashedFromFile = plaintextLines[plaintextLines.Count - 1];
+            if (hashed == hashedFromFile)
+                sameHashes = true;
 
             return decryptedLines;
         }

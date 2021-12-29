@@ -43,7 +43,7 @@ namespace ZIZad
 
         private void WriteIntoDestinationFolder(List<string> fileLines, string fileName)
         {
-            using (StreamWriter sw = new StreamWriter(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite), Encoding.Unicode))
+            using (StreamWriter sw = new StreamWriter(new FileStream(fileName, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite), Encoding.Unicode))
             {
                 foreach (var item in fileLines)
                 {
@@ -103,7 +103,11 @@ namespace ZIZad
             }
 
             if (chosenAlgorithm == 0)
-                this.cryptoAlgorithmBifid.blockMode = blockModeOnOff;
+            {
+                MessageBox.Show("This algorithm can't work in block mode due to it's way of encrypting/decrypting.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                blockModeOnOff = false;
+                lblBlockModeOnOff.Text = "OFF";
+            }
             else
                 this.cryptoAlgorithmKnapsack.blockMode = blockModeOnOff;
         }

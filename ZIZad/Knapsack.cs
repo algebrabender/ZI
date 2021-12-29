@@ -117,8 +117,7 @@ namespace ZIZad
                 encryptedLines.Add(plaintext);
             }
 
-            tigerHash.Preprocess(oneLine);
-            byte[] hashedText = tigerHash.Process();
+            byte[] hashedText = tigerHash.Process(oneLine);
             string temp = Encoding.Unicode.GetString(hashedText);
             encryptedLines.Add(temp);
 
@@ -135,7 +134,7 @@ namespace ZIZad
             List<string> plaintextLines = new List<string>();
 
             //u slucaju ponovnog otvaranja kroz fsw nakon nekog vremena
-            using (StreamReader sr = new StreamReader((new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))))
+            using (StreamReader sr = new StreamReader(new FileStream(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite), Encoding.Unicode))
             {
                 string line = sr.ReadLine();
                 while (!String.IsNullOrEmpty(line))
@@ -208,9 +207,7 @@ namespace ZIZad
                 oneLine += plaintext + "\n";
                 decryptedLines.Add(plaintext);
             }
-
-            tigerHash.Preprocess(oneLine);
-            byte[] hashedText = tigerHash.Process();
+            byte[] hashedText = tigerHash.Process(oneLine);
             string temp = Encoding.Unicode.GetString(hashedText);
             string hashedFromFile = plaintextLines[plaintextLines.Count - 1];
             if (temp == hashedFromFile)
@@ -252,7 +249,7 @@ namespace ZIZad
 
             string filePath = "Keys\\" + fileName;
 
-            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)))
+            using (StreamWriter sw = new StreamWriter(new FileStream(filePath, FileMode.Create, FileAccess.ReadWrite, FileShare.ReadWrite)))
             {
 
                 foreach (int i in J)

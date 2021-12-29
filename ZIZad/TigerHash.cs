@@ -16,29 +16,57 @@ namespace ZIZad
 
         public TigerHash()
         {
-            chunksOf512bits = new List<byte[]>();
             sbox = new SBoxes();
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             h0 = 0x0123456789ABCDEF;
             h1 = 0xFEDCBA9876543210;
             h2 = 0xF096A5B4C3D2E187;
         }
-
-        public void Preprocess(string message)
+        
+        private void Preprocess(string message)
         {
+            chunksOf512bits = new List<byte[]>();
+            Initialize();
+
             byte[] messageInBytes = Encoding.Unicode.GetBytes(message);
-            int len = messageInBytes.Length / 64;
-            for (int i = 0; i < len; i++)
+            int len = messageInBytes.Length;
+            int numOfBits = len * 8;
+            byte[] newMessageInBytes = new byte[len + (64 - len % 64)]; 
+
+            for (int i = 0; i < messageInBytes.Length; i++)
+            {
+                newMessageInBytes[i] = messageInBytes[i];
+            }
+
+            newMessageInBytes[messageInBytes.Length] = 0x80; //append "1" bit to message
+
+            for (int i = messageInBytes.Length + 1; i < newMessageInBytes.Length - 8; i++)
+            {
+                newMessageInBytes[i] = 0; //append "0" bits until message length in bits ≡ 448(mod 512)
+            }
+
+            byte[] word64 = BitConverter.GetBytes((long)(numOfBits)); //to bytes
+            for (int i = 0; i < 8; i++)
+            {
+                newMessageInBytes[newMessageInBytes.Length - 9 + i] = word64[i];
+            }
+
+            for (int i = 0; i < newMessageInBytes.Length / 64; i++)
             {
                 byte[] chunk = new byte[64];
-                Array.Copy(messageInBytes, i * 64, chunk, 0, 64);
+                Array.Copy(newMessageInBytes, i * 64, chunk, 0, 64);
                 chunksOf512bits.Add(chunk);
-                //provera ako nije ceo umnozak da se za taj doda
             }
         }
 
-        public byte[] Process()
+        public byte[] Process(string message)
         {
-            //byte[] chunkOf512bits = new byte[64];
+            Preprocess(message);
+
             foreach (byte[] chunk in chunksOf512bits)
             {
                 ulong a = h0;
