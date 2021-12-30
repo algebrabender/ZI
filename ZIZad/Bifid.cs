@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Text;
 
 namespace ZIZad
 {
@@ -65,7 +63,7 @@ namespace ZIZad
                             foundLetter = true;
                             break;
                         }
-                    }                
+                    }
                     if (foundLetter)
                     {
                         foundLetter = false;
@@ -120,7 +118,7 @@ namespace ZIZad
                     //encryptedPlaintext += " ";
                     i++;
                 }
-                encryptedPlaintext += keySquare[Int32.Parse(newValue[i].ToString()) - 1, Int32.Parse(newValue[i+1].ToString()) - 1];
+                encryptedPlaintext += keySquare[Int32.Parse(newValue[i].ToString()) - 1, Int32.Parse(newValue[i + 1].ToString()) - 1];
             }
         }
 
@@ -145,8 +143,8 @@ namespace ZIZad
             value = "";
             bool foundLetter = false;
 
-            for(int k = 0; k < newValue.Length; k++)
-            { 
+            for (int k = 0; k < newValue.Length; k++)
+            {
                 if (newValue[k] == ' ')
                 {
                     continue;

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ZIZad
@@ -104,7 +101,7 @@ namespace ZIZad
 
             if (chosenAlgorithm == 0)
             {
-                MessageBox.Show("This algorithm can't work in block mode due to it's way of encrypting/decrypting.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("This algorithm can't work in block mode due to its way of encrypting/decrypting.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 blockModeOnOff = false;
                 lblBlockModeOnOff.Text = "OFF";
             }
@@ -270,8 +267,12 @@ namespace ZIZad
                 decrytedFileLines = this.cryptoAlgorithmKnapsack.Decrypt(this.decryptFilePath, out sameHashes);
 
             if (!sameHashes)
-                MessageBox.Show("Hash values were not the same", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+            {
+                if (chosenAlgorithm == 0)
+                    MessageBox.Show("Hash values were not the same. This could be due to the nature of the algorithm.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                else
+                    MessageBox.Show("Hash values were not the same.", "Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
             folderBrowserDialog.SelectedPath = "";
             folderBrowserDialog.ShowDialog();
 

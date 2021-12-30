@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
 
 namespace ZIZad
 {
@@ -81,7 +80,6 @@ namespace ZIZad
                         for (int i = len - 1; i >= 0; i--)
                         {
                             int b = B[i] ? 1 : 0;
-                            Console.WriteLine(B[i]);
                             if (b == 0)
                                 continue;
                             C += J[i] * b;
@@ -96,7 +94,6 @@ namespace ZIZad
                         for (int i = 15; i >= 0; i--)
                         {
                             int b = nonceInBits[i] ? 1 : 0;
-                            Console.WriteLine(nonceInBits[i]);
                             if (b == 0)
                                 continue;
                             C += J[i] * b;
@@ -183,7 +180,6 @@ namespace ZIZad
                         for (int i = 15; i >= 0; i--)
                         {
                             int b = nonceInBits[i] ? 1 : 0;
-                            Console.WriteLine(nonceInBits[i]);
                             if (b == 0)
                                 continue;
                             c += J[i] * b;
@@ -228,9 +224,9 @@ namespace ZIZad
 
             n = random.Next(temp, temp + 3); //da bi se izbegli veliki brojevi
 
-            temp = random.Next(1, (int)n/2); //da bi se izbegli veliki brojevi
+            temp = random.Next(1, (int)n / 2); //da bi se izbegli veliki brojevi
             while (this.GCD(n, temp) != 1)
-                temp = random.Next(1, (int)n/2);
+                temp = random.Next(1, (int)n / 2);
             m = temp;
 
             for (int i = 0; i < 16; i++)
@@ -310,7 +306,7 @@ namespace ZIZad
         private long GCD(long a, long b)
         {
             long temp;
-            
+
             while (b != 0)
             {
                 temp = a;
@@ -321,7 +317,7 @@ namespace ZIZad
             return a;
         }
 
-        private long ModInverse(long  m, long n)
+        private long ModInverse(long m, long n)
         {
             long n0 = n;
             long y = 0;

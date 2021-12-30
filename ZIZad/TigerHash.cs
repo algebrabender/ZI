@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace ZIZad
 {
@@ -26,7 +24,7 @@ namespace ZIZad
             h1 = 0xFEDCBA9876543210;
             h2 = 0xF096A5B4C3D2E187;
         }
-        
+
         private void Preprocess(string message)
         {
             chunksOf512bits = new List<byte[]>();
@@ -35,7 +33,7 @@ namespace ZIZad
             byte[] messageInBytes = Encoding.Unicode.GetBytes(message);
             int len = messageInBytes.Length;
             int numOfBits = len * 8;
-            byte[] newMessageInBytes = new byte[len + (64 - len % 64)]; 
+            byte[] newMessageInBytes = new byte[len + (64 - len % 64)];
 
             for (int i = 0; i < messageInBytes.Length; i++)
             {
